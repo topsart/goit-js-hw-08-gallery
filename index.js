@@ -10,6 +10,7 @@ const lightBoxOverlay = document.querySelector('.lightbox__overlay');
 const escButton = 'Escape';
 const arrowLeft = 'ArrowLeft';
 const arrowRight = 'ArrowRight';
+const isOpenClass = 'is-open';
 let currentImgIndex = null;
 
 const createGalleryItem = () => {
@@ -61,7 +62,7 @@ const gridRenderer = () => {
 
 const renderModal = imgIndex => {
   currentImgIndex = Number(imgIndex);
-  lightBox.classList.add('is-open');
+  lightBox.classList.add(isOpenClass);
 
   setMultipleAttributes(lightBoxImage, {
     src: galleryItems.default[imgIndex].original,
@@ -71,7 +72,7 @@ const renderModal = imgIndex => {
 
 const closeModal = () => {
   currentImgIndex = null;
-  lightBox.classList.remove('is-open');
+  lightBox.classList.remove(isOpenClass);
   lightBoxImage.removeAttribute('src');
   lightBoxImage.removeAttribute('alt');
 };
@@ -84,6 +85,10 @@ ulGallery.addEventListener('click', event => {
 lightBoxButton.addEventListener('click', closeModal);
 
 lightBoxOverlay.addEventListener('click', closeModal);
+
+const isModalActive = () => {
+  return lightBox.classList.contains(isOpenClass);
+};
 
 const swipeLeft = () => {
   const minIndex = 0;
@@ -106,6 +111,9 @@ const swipeRight = () => {
 };
 
 document.addEventListener('keyup', event => {
+  if (!isModalActive()) {
+    return;
+  }
   switch (event.key) {
     case escButton:
       closeModal();
